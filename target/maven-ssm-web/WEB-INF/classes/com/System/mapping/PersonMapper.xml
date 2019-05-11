@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.System.dao.PersonMapper">
+
+
+    <!-- 查询所有person -->  
+    <select id="queryAll" resultType="Person" >  
+        select * from person  
+    </select>
+    
+    
+ 	    <!-- 插入信息 -->
+	<insert id="insertPerson" parameterType="Person"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into person(name,age)
+		values(#{name},#{age} )
+	</insert>
+
+ 	    <!-- 更新用户信息 --> 
+	<update id="updatePerson" parameterType="Person">
+		update person 
+		<set>
+		<if test="name!=null">
+			name=#{name},
+		</if> 
+		<if test="age!=null">
+			age=#{age},
+		</if>		 
+		</set> 
+		where id = #{id}
+	</update>
+
+	    <!-- 删除操作 -->
+	<delete id="deletePerson" parameterType="int">
+		delete from person where
+		id = #{id}
+	</delete>
+
+<!-- 	按ID查找person -->
+	<select id="IDfind" parameterType="int" resultType="Person">
+		select * from
+		person where id = #{id}
+	</select>
+	
+<!-- 	ID集合查找person -->
+	<select id="IDListfind" parameterType="map" resultType="Person">
+		select * from person where id in
+		<foreach collection="list" item="idTemp" open="(" close=")" separator="," >
+		    #{idTemp}
+		</foreach>
+	</select>
+
+	<!-- 动态查找 -->
+	<select id="getPerson" resultType="Person" parameterType="map">
+		select * from person
+		where id > #{id}
+		<if test="name!=null">
+			and name like #{name}
+		</if>
+		<if test="age!=null">
+			and age > #{age}
+		</if>
+	</select>
+
+	<!-- choose查找 -->
+	<select id="choosePerson" resultType="Person"
+		parameterType="map">
+		select * from person
+		where id > #{id}
+		<choose>
+			<when test="name!=null">
+				and name like #{name}
+			</when>
+			<when test="age!=null">
+				and age > #{age}
+			</when>
+			<otherwise>
+				1=1
+			</otherwise>
+		</choose>
+	</select>
+
+	<!-- where查找 -->
+	<select id="wherePerson" resultType="Person" parameterType="map">
+		select * from person
+		<where>
+			<if test="id!=0">
+				and id = #{id}
+			</if>
+			<if test="name!=null">
+				and name like #{name}
+			</if>
+			<if test="age!=0">
+				and age > #{age}
+			</if>
+		</where>
+	</select>
+
+	<!-- trim查找 -->
+	<select id="trimPerson" resultType="Person" parameterType="map">
+		select * from person
+		<trim prefix="where" prefixOverrides="and/or">
+			<if test="id!=0">
+				id = #{id}
+			</if>
+			<if test="name!=null">
+			 	name like #{name}
+			</if>
+			<if test="age!=0">
+				age > #{age}
+			</if>
+		</trim>
+	</select>
+    
+</mapper>

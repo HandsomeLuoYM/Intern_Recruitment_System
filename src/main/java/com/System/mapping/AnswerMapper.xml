@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.System.dao.AnswerMapper">
+
+	<!-- 查询所有题目 -->
+	<select id="qurryAllAnswer" resultType="Answer">
+		select * from user_answer_table where Status = 1
+	</select>
+
+	<!-- 插入题目和内容 -->
+	<insert id="insertAnswer" parameterType="Answer"
+	useGeneratedKeys="true" keyProperty="id">
+		insert into user_answer_table(Completion,Content,UserId,Score,Status) values(#{Completion},#{Content},#{UserId},#{Score},#{Status})
+	</insert>
+	
+	<update id="ChangeStatus" parameterType="int">
+		update user_answer_table set Status = 2 where id = #{id}
+	</update>
+	
+</mapper>

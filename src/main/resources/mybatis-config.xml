@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration  
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"  
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- 全局别名设置，在映射文件中只需写别名，而不必写出整个类路径 -->
+	<typeAliases>
+<!-- 		<typeAlias type="com.System.model.Person" alias="Person" /> -->
+		<typeAlias type="com.System.model.User" alias="User" />
+		<typeAlias type="com.System.model.Time" alias="Time" />	
+		<typeAlias type="com.System.model.Exam" alias="Exam" />	
+		<typeAlias type="com.System.model.Completion" alias="Completion" />	
+		<typeAlias type="com.System.model.Answer" alias="Answer" />	
+	</typeAliases>
+
+	<plugins>
+		<!-- com.github.pagehelper为PageHelper类所在包名 -->
+		<plugin interceptor="com.github.pagehelper.PageInterceptor"></plugin>
+	</plugins>
+
+	<mappers>
+		<mapper resource="com/System/mapping/PersonMapper.xml" />
+		<mapper resource="com/System/mapping/UserMapper.xml" />
+		<mapper resource="com/System/mapping/TimeMapper.xml" />
+		<mapper resource="com/System/mapping/ExamMapper.xml" />
+		<mapper resource="com/System/mapping/AdminMapper.xml" />
+		<mapper resource="com/System/mapping/AnswerMapper.xml" />
+		<mapper resource="com/System/mapping/CompletionMapper.xml" />
+<!-- 		<mapper class="com.System.dao.PersonMapper"/> -->
+<!-- 		<mapper class="com.System.dao.UserMapper"/> -->
+<!-- 		<mapper class="com.System.dao.ExamMapper"/> -->
+<!-- 		<mapper class="com.System.dao.TimeMapper"/> -->
+<!-- 		<package name="com.System.dao.UserMapper" />		 -->
+<!-- 		<package name="com.System.dao.TimeMapper" /> -->
+	</mappers>
+
+<!-- 	<mappers> -->
+<!-- 		<mapper resource="com/System/mapping/UserMapper.xml" /> -->
+<!-- 		<package name="com.System.dao.UserMapper" /> -->
+<!-- 	</mappers> -->
+
+</configuration> 

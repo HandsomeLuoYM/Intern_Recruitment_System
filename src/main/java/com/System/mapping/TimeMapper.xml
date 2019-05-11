@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ <mapper namespace="com.System.dao.TimeMapper">
+ 
+ 	 <!-- 查询所有Time -->  
+    <select id="queryAllTime" parameterType="int" resultType="Time">  
+        select * from time_table where type = #{type}
+    </select>
+    
+    <!-- 插入时间段 -->
+    <insert id="insertTime" parameterType="Time" useGeneratedKeys="true" keyProperty="id">
+    	insert into time_table(begin_time,over_time,now_number,all_number,type) values(#{begin_time},#{over_time},0,#{all_number},#{type})
+    </insert>
+    
+    <select id="Idfind" parameterType="int" resultType="Time">
+    	select * from time_table where id = #{id}
+    </select>
+    
+    <update id="updateTime" parameterType="Time">
+    	update time_table set now_number = #{now_number} where id = #{id}
+    </update>
+ </mapper>

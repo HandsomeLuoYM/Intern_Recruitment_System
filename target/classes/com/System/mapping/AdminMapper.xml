@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+ 
+<mapper namespace="com.System.dao.AdminMapper">
+
+	 <!-- 查询所有普通用户 -->  
+    <select id="findCommonUser" resultType="User" >  
+        select * from user_table where IsAdmin=2
+    </select>
+	
+	<!-- 根据Id查找用户 -->
+	<select id="Idfind" parameterType="int" resultType = "User">
+		select * from user_table where id=#{id}
+	</select>
+	
+	<!-- 更新用户信息 --> 
+	<update id="updateUser" parameterType="User">
+			update user_table 
+		<set>
+		<if test="SchoolName!=null">
+			SchoolName=#{SchoolName},
+		</if>
+		<if test="StudentName!=null">
+			StudentName=#{StudentName},
+		</if> 
+		<if test="StudentId!=null">
+			StudentId=#{StudentId},
+		</if> 
+		<if test="Grade!=null">
+			Grade=#{Grade},
+		</if> 
+		<if test="TelephoneNumber!=null">
+			TelephoneNumber=#{TelephoneNumber},
+		</if> 
+		<if test="Email!=null">
+			Email=#{Email},
+		</if> 
+		<if test="Adress!=null">
+			Adress=#{Adress},
+		</if>
+		<if test="Self_introduction!=null">
+			Self_introduction = #{Self_introduction},
+		</if>
+		<if test="TimeId!=0">
+			TimeId = #{TimeId},
+		</if>
+		<if test="Score!=0">
+			Score = #{Score},
+		</if>
+		<if test="InterviewScore!=0">
+			InterviewScore=#{InterviewScore},
+		</if>	
+		<if test="status!=0">
+			status=#{status},
+		</if>		 
+		</set> 
+		where id = #{id}
+	</update>
+	
+	<!-- 删除管理员删除普通用户 -->
+	<delete id="deleteUser" parameterType="int">
+		delete from user_table where id = #{id}
+	</delete>
+	
+	<!-- 查找面试的人 -->
+	<select id="findInterviewUser" resultType = "User">
+        select * from user_table where status=7
+	</select>
+	
+
+	
+	
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.System.dao.ExamMapper">
+	<!-- 查询所有题目 -->
+	<select id="queryAllExam" resultType="Exam">
+		select * from exam_table
+	</select>
+
+	<!-- 添加题目 -->
+	<insert id="insertStem" parameterType="Exam"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into exam_table(Stem,AOption,BOption,COption,DOption,RightOption,Score)
+		values(#{Stem},#{AOption},#{BOption},#{COption},#{DOption},#{RightOption},#{Score})
+	</insert>
+
+	<!-- 查找题目 -->
+	<select id="Idfind" parameterType="int" resultType="Exam">
+		select * from exam_table where id = #{id}
+	</select>
+
+	<!-- 删除题目 -->
+	<delete id="deleteStem" parameterType="int">
+		delete from exam_table where id = #{id}
+	</delete>
+	
+	
+</mapper>
+ 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.System.dao.CompletionMapper">
+
+	<select id="qurryAllCompletion" resultType="Completion">
+		select * from completion_table
+	</select>
+	
+	<insert id="insertCompletion" parameterType="Completion">
+		insert into completion_table(Content,Answer,Score) values(#{Content},#{Answer},#{Score}) 
+	</insert>
+	
+	<delete id="deleteCompletion" parameterType="int">
+		delete from completion_table where id = #{id}
+	</delete>
+	
+</mapper>

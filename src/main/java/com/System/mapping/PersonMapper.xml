@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+ <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.System.dao.PersonMapper">
+
+
+    <!-- 查询所有person -->  
+    <select id="queryAll" resultType="User" >  
+        select * from user_table where IsAdmin not like 1
+    </select>
+    
+    
+ 	    <!-- 插入个人信息和报名信息信息 -->
+	<insert id="insertUser" parameterType="User"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into user_table(AccountNumber,SchoolName,StudentName,StudentId,Grade,TelephoneNumber,PassWord,IsAdmin,status,Email,Adress,Self_introduction)
+		values(#{AccountNumber},#{SchoolName},#{StudentName},#{StudentId},#{Grade},#{TelephoneNumber},#{PassWord},#{IsAdmin},#{status},#{Email},#{Adress},#{Self_introduction})
+	</insert>
+
+ 	    <!-- 更新用户信息 --> 
+	<update id="updateUser" parameterType="User">
+			update user_table 
+		<set>
+		<if test="SchoolName!=null">
+			SchoolName=#{SchoolName},
+		</if>
+		<if test="StudentName!=null">
+			StudentName=#{StudentName},
+		</if> 
+		<if test="StudentId!=null">
+			StudentId=#{StudentId},
+		</if> 
+		<if test="Grade!=null">
+			Grade=#{Grade},
+		</if> 
+		<if test="TelephoneNumber!=null">
+			TelephoneNumber=#{TelephoneNumber},
+		</if> 
+		<if test="PassWord!=null">
+			PassWord=#{PassWord},
+		</if> 
+		<if test="Email!=null">
+			Email=#{Email},
+		</if> 
+		<if test="Adress!=null">
+			Adress=#{Adress},
+		</if>
+		<if test="Self_introduction!=null">
+			Self_introduction=#{Self_introduction},
+		</if>
+		<if test="status!=0">
+			status =#{status },
+		</if>
+		<if test="TimeId!=0">
+			TimeId=#{TimeId},
+		</if>
+		<if test="Score!=0">
+			Score=#{Score},
+		</if>		 
+		</set> 
+		where id = #{id}
+	</update>
+
+	    <!-- 删除操作 -->
+	<delete id="deleteUser" parameterType="int">
+		delete from user_table where
+		id = #{id}
+	</delete>
+
+<!-- 	按ID查找用户 -->
+	<select id="IDfind" parameterType="int" resultType="User">
+		select * from
+		user_table where id = #{id}
+	</select>
+	
+
+	<!-- 动态查找 -->
+	<select id="getUser" resultType="User" parameterType="map">
+		select * from user_table
+		where id = #{id}
+		<if test="SchoolName!=null">
+			and SchoolName like #{SchoolName}
+		</if>
+		<if test="StudentName!=null">
+			and StudentName like #{StudentName}
+		</if> 
+		<if test="StudentId!=null">
+			and StudentId like #{StudentId}
+		</if> 
+		<if test="Grade!=null">
+			and Grade like #{Grade}
+		</if> 
+		<if test="TelephoneNumber!=null">
+			and TelephoneNumber like #{TelephoneNumber}
+		</if> 
+		<if test="Email!=null">
+			and Email like #{Email}
+		</if> 
+		<if test="Adress!=null">
+			and Adress like #{Adress}
+		</if>
+		<if test="Self_introduction!=null">
+			and Self_introduction like #{Self_introduction}
+		</if>
+		<if test="PassWord!=null">
+			and PassWord = #{PassWord}
+		</if>
+	</select>
+
+    <!-- 查询账号是否存在 -->
+    <select id="AccountNumberfind"  resultType="User" parameterType="int">
+		select * from user_table where AccountNumber = #{account}
+    </select>
+    
+    <!-- 分数段截取 -->
+    <select id="findStatusperson" resultType="User">
+		select * from user_table where status = 4 or status = 5 or status = 6
+    </select>
+    
+    <!-- 更新状态（笔试是否结束） -->
+<!--     <update id="setStatus" parameterType="int"> -->
+<!--     	update user_table set status = #{ statusNumber} where id=#{userId} -->
+<!--     </update> -->
+    
+</mapper>
