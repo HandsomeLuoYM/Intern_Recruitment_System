@@ -3,7 +3,7 @@
 <mapper namespace="com.System.dao.ExamMapper">
 	<!-- 查询所有题目 -->
 	<select id="queryAllExam" resultType="Exam">
-		select * from exam_table
+		select id,Stem,AOption,BOption,COption,DOption,Score from exam_table
 	</select>
 
 	<!-- 添加题目 -->

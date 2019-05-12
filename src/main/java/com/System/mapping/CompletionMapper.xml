@@ -4,7 +4,7 @@
 
 	<!-- 查询所有的填空题 -->
 	<select id="qurryAllCompletion" resultType="Completion">
-		select * from completion_table
+		select id,Content,Score from completion_table
 	</select>
 	
 	<!-- 添加填空题 -->
