@@ -240,7 +240,7 @@
 	</div>
 	
 	
-    <!-- 管理员设置报名时间的模态框 -->
+    <!-- 管理员设置笔试报名时间的模态框 -->
     <div class="modal fade" id="TimeAddModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
@@ -631,7 +631,7 @@
 			$("#user_table tbody").empty();
 			var users = result.extend.pageInfo.list;
 			$.each(users, function(index, item) {
-				// 	    		alert(item.name);
+				//alert(item.name);
 				var checkBoxTd = $("<td><input type='checkbox' class='check_item'/></td>");
 				checkBoxTd.attr("del-time-id",item.timeId);
 				var userIdTd = $("<td></td>").append(item.id);
@@ -643,6 +643,7 @@
 				var userElTd = $("<td></td>").append(item.email);
 				var userAdTd = $("<td></td>").append(item.adress);
 				var userSt = item.status;
+				//显示学生状态
 				if(userSt==1){
 					var userStTd = $("<td></td>").append("还未报名");
 				}else if(userSt==2){
@@ -660,7 +661,21 @@
 				}else if(userSt==8){
 					var userStTd = $("<td></td>").append("笔试成绩："+item.score+" "+"面试成绩："+item.interviewScore);
 				}else{
-					var userStTd = $("<td></td>").append("该用户为管理员");
+					//显示管理员身份
+					var endentity = item.isAdmin;
+					if(endentity==1){
+						var userStTd = $("<td></td>").append("该用户为超级管理员");
+					}else if(endentity==3){
+						var userStTd = $("<td></td>").append("该用户为笔试官");
+					}else if(endentity==4){
+						var userStTd = $("<td></td>").append("该用户为面试官");
+					}else if(endentity==5){
+						var userStTd = $("<td></td>").append("该用户为删除管理员");
+					}else if(endentity==6){
+						var userStTd = $("<td></td>").append("该用户为修改管理员");
+					}else if(endentity==7){
+						var userStTd = $("<td></td>").append("该用户为查看管理员");
+					}
 				}
 				var editBtn = $("<button></button>")
 						.addClass("btn btn-primary btn-sm edit_btn")
@@ -862,7 +877,7 @@
 				});
 		});
 		
-		//删除按钮绑定事件弹出模态框
+		//删除一个人按钮绑定事件弹出模态框
 		$(document).on("click",".delete_btn",function(){
 			var userName = $(this).parents("tr").find("td:eq(4)").text();
 			var userId = $(this).attr("del-id");
@@ -900,7 +915,7 @@
 				url:"${APP_PATH}/personController/IDfind/"+id,
 				type:"GET",
 				success:function(result){
-// 					console.log(result);
+					//构建表格
 				    var userData = result.extend.Id_find_user;
 				    $("#userId_update_static").text(userData.id);
 				    $("#useraccount_update_static").text(userData.accountNumber);				    
@@ -1006,7 +1021,6 @@
 				type:"POST",
 				data:$("#userUpdateModal form").serialize(),
 				success:function(result){
-// 					alert(result.msg);
 				    //1关闭模态框
 					$("#userUpdateModal").modal('hide');
 				    //回到第一页
@@ -1097,9 +1111,20 @@
 		
 		//为添加时间段的保存按钮绑定事件
 		$("#time_save_btn").click(function(){
+			//1.校验时间格式
 			if(!validate_timeform()){
 				return false;
 			}
+			//2.校验时间是否开始的小于结束的时间
+			var begintime =$("#time_add_begin_input").val();
+			var overtime =$("#time_add_over_input").val();
+			var   over=new Date(Date.parse(overtime .replace(/-/g,"/")));
+			var   begin=new Date(Date.parse(begintime .replace(/-/g,"/")));
+			if(begin>=over)	{
+				show_validate_msg("#time_add_begin_input", "error","开始的时间不应该大于结束时间");
+				return false;
+			}		
+			//3.发送ajax请求保存时间段
 			$.ajax({
 				url:"${APP_PATH}/timeController/insertTime",
 				type:"POST",
@@ -1133,7 +1158,7 @@
 			};
 			//人数
 			if(!regNumber.test(Number)){
-				show_validate_msg("#time_add_number_input", "error","请输入数字");
+				show_validate_msg("#time_add_number_input", "error","请输入人数");
 				return false;
 			}else{
 				show_validate_msg("#time_add_number_input", "success", "");
@@ -1201,7 +1226,7 @@
 			};
 			//人数
 			if(!regNumber.test(Number)){
-				show_validate_msg("#interview_add_number_input", "error","请输入数字");
+				show_validate_msg("#interview_add_number_input", "error","请输入人数");
 				return false;
 			}else{
 				show_validate_msg("#interview_add_number_input", "success", "");
@@ -1211,9 +1236,20 @@
 		
 		//面试时间安排的保存按钮
 			$("#interview_save_btn").click(function(){
+			//1.校验面试时间的输入格式
 			if(!validate_interviewform()){
 				return false;
 			}
+			//2.校验输入时间的大小关系
+			var begintime =$("#interview_add_begin_input").val();
+			var overtime =$("#interview_add_over_input").val();
+			var   over=new Date(Date.parse(overtime .replace(/-/g,"/")));
+			var   begin=new Date(Date.parse(begintime .replace(/-/g,"/")));
+			if(begin>=over)	{
+				show_validate_msg("#interview_add_begin_input", "error","开始的时间不应该大于结束时间");
+				return false;
+			}	
+			//3.发送ajax请求保存时间段
 			$.ajax({
 				url:"${APP_PATH}/timeController/insertInterviewTime",
 				type:"POST",
@@ -1243,6 +1279,7 @@
 				show_validate_msg("#status_update_input", "error", "请输入数字");
 				return false;
 			}
+			//截断分数段
 			$.ajax({
 				url:"${APP_PATH}/personController/scoreCut",
 				type:"POST",
@@ -1265,9 +1302,11 @@
 		function build_admin_table(){
 			$("#adminUpdateModal tbody").empty();
 			$.ajax({
+				//1.查找管理员信息
 				url:"${APP_PATH}/personController/IDfind/"+searchText,
 				type:"GET",
 				success:function(result){
+				//2.构造管理员的信息表
 				    var userData = result.extend.Id_find_user;
 				    $("#admin_name_input ").val(userData.studentName);
 				    $("#admin_telephone_input ").val(userData.telephoneNumber);
@@ -1283,6 +1322,7 @@
 				if(!validate_adminModalform()){
 					return false;
 				}
+				//2.发送ajax请求
 				$.ajax({
 					url:"${APP_PATH}/personController/adminUpdate/"+searchText,
 					type:"POST",
@@ -1345,10 +1385,12 @@
 				type:"POST",
 				data:"original_password="+ $("#admin_updatePassWord_input").val(),
 				success:function(result){
+					//根据后台返回信息显示状态
 					if(result.extend.type=="error"){
+						//密码错误显示错误信息
 			 			show_validate_msg("#admin_updatePassWord_input", "error","密码错误");
 					}else{
-						//1.弹出新的模态框   adminUpdatePasswordModal
+						//密码正确弹出新的模态框   adminUpdatePasswordModal
 						$("#adminPasswordModal").modal('hide');
 						$("#adminUpdatePasswordModal form")[0].reset();
 						$("#adminUpdatePasswordModal").modal({
@@ -1369,7 +1411,7 @@
 				show_validate_msg("#admin_savePassWord_input", "error","两次密码不相等或有为空！");
 				return false;
 			}else{
-				//2.发送ajax请求更改密码
+			//2.发送ajax请求更改密码
 				$.ajax({
 					url:"${APP_PATH}/personController/adminSavePassword/"+searchText,
 					type:"POST",

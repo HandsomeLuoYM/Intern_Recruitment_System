@@ -32,7 +32,7 @@ public interface AdminMapper {
 
 
 	/**
-	 * 找面试的人
+	 * 找在面试的人
 	 * */
 	List<User> findInterviewUser();
 

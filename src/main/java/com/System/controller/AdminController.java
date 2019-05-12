@@ -93,7 +93,9 @@ public class AdminController {
 		return Msg.success().add("pageInfo", page);
 	}
 	
-	//面试官登记分数
+	/**
+	 * 面试官登记分数
+	 * */
 	@RequestMapping(value="/RegisterScore")
 	@ResponseBody
 	public Msg RegisterScore(
@@ -106,7 +108,9 @@ public class AdminController {
 		return Msg.success();
 	}
 	
-	//登记填空题分数
+	/**
+	 * 登记填空题的分数，把分数加到用户的笔试成绩上
+	 * */
 	@RequestMapping(value="markTest",method=RequestMethod.POST)
 	@ResponseBody
 	public Msg markTest(

@@ -122,6 +122,7 @@
 			alert("分数输入错误！");
 			return false;
 		}
+		//用户的笔试分数加该题的分数
 		$.ajax({
 			url:"${APP_PATH}/answerController/markTest", 
 			type:"POST",

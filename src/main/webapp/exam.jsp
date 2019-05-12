@@ -20,49 +20,54 @@
 <%
 	pageContext.setAttribute("APP_PATH", request.getContextPath());
 %>
-	<style>
-		h1 {
-			margin-bottom:20px;
-		}
-		tr {
-			border-bottom: 1px solid #ddd;
-		}
-		.form-control {
-			height:28px;
-			margin-top:4.4px;
-		}
-		h3 {
-			margin-bottom:20px;
-		}
-		#moving-line {
-			width:50%;
-			height:1.5px;
-			background-color:#999;
-			animation:moveline 7s infinite;
-			margin:0 auto;
-		}
-		@keyframes moveline {
-			0%,10% {
-				width:0%;
-			}
-			25%, 75% {
-				width:90%;
-			}
-			90%,100% {
-				width:0%;
-			}
-		}
-		
-		
-	</style>
+<style>
+h1 {
+	margin-bottom: 20px;
+}
+
+tr {
+	border-bottom: 1px solid #ddd;
+}
+
+.form-control {
+	height: 28px;
+	margin-top: 4.4px;
+}
+
+h3 {
+	margin-bottom: 20px;
+}
+
+#moving-line {
+	width: 50%;
+	height: 1.5px;
+	background-color: #999;
+	animation: moveline 7s infinite;
+	margin: 0 auto;
+}
+
+@keyframes moveline { 
+	0%,10% {
+		width: 0%;
+	}
+	25%,75%{
+		width:90%;
+	}
+	90%,100%{
+	 	width:0%;
+	}
+}
+</style>
 </head>
 <body>
 
-	 <!-- 提交答案后弹出的模态框 -->
-	<div class="modal fade" id="Score_modal" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel">
-		<div class="modal-dialog" role="document" style="position:absolute;top:0;bottom:0;left:0;right:0;">
-			<div class="modal-content" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:100%;">
+	<!-- 提交答案后弹出的模态框 -->
+	<div class="modal fade" id="Score_modal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document"
+			style="position: absolute; top: 0; bottom: 0; left: 0; right: 0;">
+			<div class="modal-content"
+				style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%;">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
@@ -80,8 +85,7 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
-						id="examOver_btn">确认</button>
+					<button type="button" class="btn btn-primary" id="examOver_btn">确认</button>
 				</div>
 			</div>
 		</div>
@@ -91,22 +95,22 @@
 		<!-- 标题 -->
 		<div class="row">
 			<div class="col-md-12">
-				<h1 style="text-align:center;">笔试页面</h1>
+				<h1 style="text-align: center;">笔试页面</h1>
 				<div id="moving-line"></div>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-			<h3>选择题(多选题)</h3>
+				<h3>选择题(多选题)</h3>
 				<table class="table table-hover" id="answer_table">
 					<thead>
 						<tr>
 							<th>#</th>
 							<th>题目</th>
-							<th style="width:15%;">A选项</th>
-							<th style="width:15%;">B选项</th>
-							<th style="width:15%;">C选项</th>
-							<th style="width:15%;">D选项</th>
+							<th style="width: 15%;">A选项</th>
+							<th style="width: 15%;">B选项</th>
+							<th style="width: 15%;">C选项</th>
+							<th style="width: 15%;">D选项</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -115,17 +119,17 @@
 				</table>
 			</div>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-md-12">
-			<h3>填空题</h3>
+				<h3>填空题</h3>
 				<table class="table table-hover" id="completion_table">
 					<thead>
 						<tr>
 							<th>#</th>
 							<th>题目</th>
 							<th>分值</th>
-							<th style="width:130px; text-align:center;">你的答案</th>
+							<th style="width: 130px; text-align: center;">你的答案</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -140,7 +144,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 	</div>
 </body>
 <script type="text/javascript">
@@ -149,6 +153,7 @@ var searchUrl = window.location.href;
 var searchData = searchUrl.split("=");
 var searchText = decodeURI(searchData[1]);
 
+//构造考试页面
 $(function(){
     build_proposition_table();
     build_completion_table();
@@ -168,9 +173,10 @@ function build_proposition_table(){
 		type:"GET",
 		success:function(result){
 			var exams = result.extend.AllExam;
+			//构造每一行
 			$.each(exams,function(index,item){
 				var arr = [item.aoption,item.boption,item.coption,item.doption];
-				var arr2 = arr.sort(randomsort);
+				var arr2 = arr.sort(randomsort);//打乱选择题顺序，可以多次随机打乱
 				var AcheckBox = $("<input type='checkbox' class='check_item'/>");
 				AcheckBox.attr("check-value",arr2[0]);
 				var BcheckBox = $("<input type='checkbox' class='check_item'/>");
@@ -193,7 +199,6 @@ function build_proposition_table(){
 				.append(BTd)
 				.append(CTd)
 				.append(DTd)    				
-// 				.append(OptionTd)
 				.appendTo("#answer_table tbody");
 			});
 		}
@@ -227,7 +232,7 @@ function build_completion_table(){
 //提交答案按钮绑定事件
 $("#anwer_save_btn").click(function(){
 	
-	//提交填空题的答案
+	//提交填空题的答案，以一行一行的提交，存到数据库
 	$("#completion_table tbody tr").each(function(){
 		var Content = $(this).find("#answer").val();
 		var Problem = $(this).find("td:eq(1)").text();
@@ -245,8 +250,7 @@ $("#anwer_save_btn").click(function(){
 			
 		});
 	});
-
-	
+	//构造提交选择题的上交格式	
 	var ids_values="";
 	if(confirm("确定提交答案？")){
 		$("#answer_table tbody tr").each(function(){
@@ -273,7 +277,7 @@ $("#anwer_save_btn").click(function(){
 			    data:"userId="+ searchText +"&"+
 			     	 "score="+ result.extend.score,
 				});
-				//2.得到信息
+				//2.页面得到信息
 				$("#Score_modal").modal({
 				backdrop : "static"
 				});

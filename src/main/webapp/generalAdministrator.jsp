@@ -308,7 +308,9 @@
 					//console.log(result);
 					//解析数据并显示，再显示分页信息
 					build_person_table(result);
+					//构造分页信息
 					build_page_Info(result);
+					//构造页面索引
 					build_page_nav(result);
 				}
 			})
@@ -333,7 +335,7 @@
 						var userTpTd = $("<td></td>").append(item.telephoneNumber);
 						var userElTd = $("<td></td>").append(item.email);
 						var userAdTd = $("<td></td>").append(item.adress);
-						
+						//构造用户的当前状态
 						var userSt = item.status;
 						if(userSt==1){
 							var userStTd = $("<td></td>").append("还未报名");
@@ -354,6 +356,7 @@
 						}else{
 							var userStTd = $("<td></td>").append("");
 						}
+						//构造管理员的权限
 						if(Indentity==5){
 						   var delBtn = $("<button></button>")
 							.addClass("btn btn-danger btn-sm delete_btn")
@@ -592,6 +595,7 @@
 				url:"${APP_PATH}/adminController/Idfind/"+id,
 				type:"POST",
 				success:function(result){
+// 					$("#userCheckModal").empty();
 				    var userData = result.extend.user;
 				    $("#userId_check_static").text(userData.id);
 				    $("#accountNumber_check_static").text(userData.accountNumber);				    
@@ -600,11 +604,24 @@
 				    $("#studentId_check_static  ").text(userData.schoolName);
 				    $("#grade_check_static  ").text(userData.grade);
 				    $("#telephoneNumber_check_static ").text(userData.telephoneNumber);
-				    $("#email_check_static ").text(userData.email);
-				    $("#adress_check_static ").text(userData.adress);
-				    $("#introduction_checke_static").text(userData.self_introduction);
+				    if(userData.email!=null){
+					    $("#email_check_static ").text(userData.email);
+				    }else{
+					    $("#email_check_static ").text("");
+				    }
+				    if(userData.adress!=null){
+					    $("#adress_check_static ").text(userData.adress);
+				    }else{
+					    $("#adress_check_static ").text("");
+				    }
+				    if(userData.self_introduction!=null){
+					    $("#introduction_checke_static").text(userData.self_introduction);
+				    }else{
+					    $("#introduction_checke_static").text("");
+				    }
 					$("#usertime_check_static").text("");
 				    if(userData.timeId!=0){
+				    //构造用户的面试/笔试时间段
 				    $.ajax({
 				    	url:"${APP_PATH}/timeController/timeUser/"+userData.timeId,
 				    	type:"POST",

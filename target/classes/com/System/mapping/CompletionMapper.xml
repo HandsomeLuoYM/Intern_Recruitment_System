@@ -2,14 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.System.dao.CompletionMapper">
 
+	<!-- 查询所有的填空题 -->
 	<select id="qurryAllCompletion" resultType="Completion">
 		select * from completion_table
 	</select>
 	
+	<!-- 添加填空题 -->
 	<insert id="insertCompletion" parameterType="Completion">
 		insert into completion_table(Content,Answer,Score) values(#{Content},#{Answer},#{Score}) 
 	</insert>
 	
+	<!-- 删除填空题 -->
 	<delete id="deleteCompletion" parameterType="int">
 		delete from completion_table where id = #{id}
 	</delete>

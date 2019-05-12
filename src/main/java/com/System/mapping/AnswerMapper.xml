@@ -3,7 +3,7 @@
 
 <mapper namespace="com.System.dao.AnswerMapper">
 
-	<!-- 查询所有题目 -->
+	<!-- 查询所有未改题目 -->
 	<select id="qurryAllAnswer" resultType="Answer">
 		select * from user_answer_table where Status = 1
 	</select>
@@ -14,6 +14,7 @@
 		insert into user_answer_table(Completion,Content,UserId,Score,Status) values(#{Completion},#{Content},#{UserId},#{Score},#{Status})
 	</insert>
 	
+	<!-- 把改过的题的状态变成已改的 -->
 	<update id="ChangeStatus" parameterType="int">
 		update user_answer_table set Status = 2 where id = #{id}
 	</update>

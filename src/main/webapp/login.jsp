@@ -80,15 +80,14 @@
 	    			url = "showperson.jsp?id="+result.extend.user.id;//此处拼接内容
 		    		window.location.href=url;
 	    		}else if(result.extend.user.isAdmin==3){
-	    			url = "proposition.jsp?id="+result.extend.user.id;
+	    			url = "proposition.jsp?id="+result.extend.user.id;//此处拼接内容
 	    			window.location.href=url;
 	    		}else if(result.extend.user.isAdmin==4){
-	    			url = "Interviewer.jsp?id="+result.extend.user.id;
+	    			url = "Interviewer.jsp?id="+result.extend.user.id;//此处拼接内容
 	    			window.location.href=url;
 	    		}else{
-	    			url = "generalAdministrator.jsp?id="+result.extend.user.id;
+	    			url = "generalAdministrator.jsp?id="+result.extend.user.id;//此处拼接内容
 	    			window.location.href=url;
-
 	    		}
 	    	}
 	    }

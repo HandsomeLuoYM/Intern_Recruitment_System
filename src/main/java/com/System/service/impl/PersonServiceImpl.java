@@ -39,6 +39,7 @@ public class PersonServiceImpl implements IPersonService {
 		}
 		personMapper.insertUser(user);
 	}
+	
     /**
      * Id查找用户
      * */
@@ -59,7 +60,6 @@ public class PersonServiceImpl implements IPersonService {
 	public List<User> queryAll() {
 		return personMapper.queryAll();
 	}
-
 
 	/**
 	 * 用户删除

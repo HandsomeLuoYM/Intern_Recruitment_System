@@ -364,7 +364,6 @@
 			url:"${APP_PATH}/userController/IDfindUser/"+id,
 			type:"GET",
 			success:function(result){
-// 				alert(result.msg);
 			    var user = result.extend.user;
 			    $("#userId_update_static").text(user.id);
 			    $("#useraccount_update_static").text(user.accountNumber);			    
@@ -385,8 +384,8 @@
 		//要先清空表格数据，防止界面紊乱
 		$("#user_table tbody").empty();
 		var user = result.extend.user;
-// 			alert(user.accountNumber);
 			var status = user.status;
+			
 			$("#file").attr("src",user.picture);
 			var userIdTd = $("<td></td>").append(user.id);
 			var accountTd = $("<td></td>").append(user.accountNumber);
@@ -402,6 +401,7 @@
 				.addClass("btn btn-danger enroll_modal_btn")
 				.append("报名");
 				var tipTd=$("<tr></tr>").append(status).append(enjoin);
+				$("<tr></tr>").append(tipTd).appendTo("#Tip_table tbody");
 			}else if(status==2){				
 				var status = $("<td></td>").append("你已经报名了哟！   ");
 				var enjoin =$("<button></button>")
@@ -412,17 +412,39 @@
 				.append("报名笔试");
 				interTd.attr("inter-id",user.id);
 				var tipTd=$("<tr></tr>").append(status).append(enjoin).append(interTd);
+				$("<tr></tr>").append(tipTd).appendTo("#Tip_table tbody");
 			}else if(status==3){
 				var status = $("<td></td>").append("你已经报名笔试了 ！");
-				var interTd =$("<button></button>")
-				.addClass("btn btn-success exam-begin-btn")
-				.append("开始笔试考试");
-				interTd.attr("inter-id",user.id);
-				var tipTd=$("<tr></tr>").append(status).append(interTd);
+				 $.ajax({
+				    	url:"${APP_PATH}/timeController/timeUser/"+user.timeId,
+				    	type:"POST",
+				    	success:function(result){
+				    		var begintime=result.extend.time.begin_time;
+				    		var overtime=result.extend.time.over_time;
+				    		var   over=new Date(Date.parse(overtime .replace(/-/g,"/")));
+				    		var   begin=new Date(Date.parse(begintime .replace(/-/g,"/")));
+				            var   curDate=new Date();
+				            if(over>=curDate&&begin<=curDate){
+								var interTd =$("<button></button>")
+								.addClass("btn btn-success exam-begin-btn")
+								.append("开始笔试考试");	
+								interTd.attr("inter-id",user.id);
+								var tipTd=$("<tr></tr>").append(status).append(interTd);
+								$("<tr></tr>").append(tipTd).appendTo("#Tip_table tbody");
+							}else{
+								var interTd = "你的笔试时间是："+result.extend.time.begin_time+"--"+result.extend.time.over_time;
+								var tipTd=$("<tr></tr>").append(status).append(interTd);
+								$("<tr></tr>").append(status).append(tipTd).appendTo("#Tip_table tbody");
+
+				            }
+				    	}
+				     });
 			}else if(status==4){
 				var tipTd = $("<td></td>").append("你已经完成了笔试，结果请等待通知！（结果通过你的邮箱和该页面通知）");
+				$("<tr></tr>").append(tipTd).appendTo("#Tip_table tbody");
 			}else if(status==5){
 				var tipTd = $("<td></td>").append("抱歉！你未能通过笔试，希望你继续努力！");
+				$("<tr></tr>").append(tipTd).appendTo("#Tip_table tbody");
 			}else if(status==6){
 				var status = $("<td></td>").append("恭喜"+user.studentName+"用户通过了笔试！");
 				var interTd =$("<button></button>")
@@ -430,20 +452,22 @@
 				.append("报名面试");
 				interTd.attr("inter-id",user.id);
 				var tipTd=$("<tr></tr>").append(status).append(interTd);
+				$("<tr></tr>").append(tipTd).appendTo("#Tip_table tbody");
 			}else if(status==7){
 				var status = $("<td></td>").append("恭喜"+user.studentName+"面试预约成功！");
 				var interTd ="";
 				var tipTd=$("<tr></tr>").append(status).append(interTd);
+				$("<tr></tr>").append(tipTd).appendTo("#Tip_table tbody");
 			}else if(status==8){
 				var status = $("<td></td>").append(user.studentName+"你的笔试成绩："+user.score+" "+"面试成绩："+user.interviewScore);
 				var tipTd=$("<tr></tr>").append(status);
+				$("<tr></tr>").append(tipTd).appendTo("#Tip_table tbody");
 			}
 			var retip=$("<td></td>").addClass("alert alert-success");
 			var retip2=$("<td></td>").addClass("alert alert-success");
 			$("<tr></tr>").append(userIdTd).append(accountTd).append(userschTd).append(userNameTd).append(
 							usergradeTd).append(userteleTd).append(useremailTd).append(useradressTd).appendTo(
 							"#user_table tbody");
-			$("<tr></tr>").append(tipTd).appendTo("#Tip_table tbody");
 	};
 	
 	//点击修改完善个人信息弹出并建立模态框.
@@ -515,7 +539,7 @@
 		});
 	
 	
-		//校验状态的检查
+		//校验input框状态的检查
 		function show_validate_msg(ele,status,msg){
 			//清除当前的校验状态元素
 			$(ele).parent().removeClass("has-error has-success");
@@ -599,7 +623,6 @@
 	//点击报名笔试时间按钮弹出模态框
 	$(document).on("click",".enter-btn",function(){
             //给更新按钮加Id方便保存时获取
-//             $("#user_update_btn").attr("edit-id",$(this).attr("edit-id"));
 			$("#TimeModal").modal({
 				backdrop : "static"
 			});
@@ -619,27 +642,32 @@
 			$("#time_table tbody").empty();
 			var times = result.extend.times;
 			$.each(times, function(index, item) {
-				var timeIdTd = $("<td></td>").append(item.id);
-				var timeANTd = $("<td></td>").append(item.all_number);
-				var timeBTTd = $("<td></td>").append(item.begin_time);
-				var timeOTTd = $("<td></td>").append(item.over_time);
-				var timeNNTd = $("<td></td>").append(item.now_number);
-				var enterTd =null;
-				if(item.all_number!=item.now_number){
-					var enterTd =$("<button></button>")
-					.addClass("btn btn-warning  exam-btn")
-					.append("报名");
-					enterTd.attr("exam-id",item.id);
-					enterTd.attr("exam-type",item.type);
+	    		var overtime=item.over_time;
+	    		var   over=new Date(Date.parse(overtime .replace(/-/g,"/")));
+	            var   curDate=new Date();
+				if(over>=curDate){
+					var timeIdTd = $("<td></td>").append(item.id);
+					var timeANTd = $("<td></td>").append(item.all_number);
+					var timeBTTd = $("<td></td>").append(item.begin_time);
+					var timeOTTd = $("<td></td>").append(item.over_time);
+					var timeNNTd = $("<td></td>").append(item.now_number);
+					var enterTd =null;
+					if(item.all_number!=item.now_number){
+						var enterTd =$("<button></button>")
+						.addClass("btn btn-warning  exam-btn")
+						.append("报名");
+						enterTd.attr("exam-id",item.id);
+						enterTd.attr("exam-type",item.type);
+					}
+					$("<tr></tr>")
+					.append(timeIdTd)
+					.append(timeBTTd)
+					.append(timeOTTd)
+					.append(timeANTd)
+					.append(timeNNTd)
+					.append(enterTd)
+					.appendTo("#time_table tbody");
 				}
-				$("<tr></tr>")
-				.append(timeIdTd)
-				.append(timeBTTd)
-				.append(timeOTTd)
-				.append(timeANTd)
-				.append(timeNNTd)
-				.append(enterTd)
-				.appendTo("#time_table tbody");
 			});
 		}
 	
@@ -655,6 +683,7 @@
 				     "examType="+$(this).attr("exam-type"),
 				type:"POST",
 			});
+			//如果已经报名了笔试或者面试，把时间段人数-1
 			$.ajax({
 				url:"${APP_PATH}/timeController/enterExam/"+ $(this).attr("exam-id"),
 				type:"POST",
@@ -668,17 +697,16 @@
 	//开始笔试按钮
 	$(document).on("click",".exam-begin-btn",function(){
 		var examurl = "exam.jsp?id="+$(this).attr("inter-id");
-// 		alert(examurl);
 		window.location.href= examurl;
 	});
 	
-	//点击报名笔试时间按钮弹出模态框
+	//点击报名面试时间按钮弹出模态框
 	$(document).on("click",".enterInterview-btn",function(){
-            //给更新按钮加Id方便保存时获取
-//             $("#user_update_btn").attr("edit-id",$(this).attr("edit-id"));
+            //给更新按钮加Id方便保存时获取，打开模态框
 			$("#TimeModal").modal({
 				backdrop : "static"
 			});
+            //发送ajax请求，并且构建表格
 			$.ajax({
 				url:"${APP_PATH}/timeController/queryAllTime",
 				type:"POST",
@@ -695,6 +723,7 @@
 		formData.append("pictureFile", $("#pictureFile")[0].files[0]);
 		if($("#pictureFile").val()!=""){
 			if(confirm("确定修改头像吗？")){
+				//1.把新的头像存到本地，然后获取路径
 				$.ajax({
 					url : "${APP_PATH}/userController/ChangePicture",
 					type : "POST",
@@ -702,6 +731,7 @@
 		            processData: false,
 		            contentType: false,
 					success : function(result) {
+						//2.更改用户头像的头像路径
 						$.ajax({
 							url:"${APP_PATH}/userController/updatePicture/"+searchText,
 							type:"POST",

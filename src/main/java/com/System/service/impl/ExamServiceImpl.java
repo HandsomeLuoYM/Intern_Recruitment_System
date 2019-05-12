@@ -24,14 +24,23 @@ public class ExamServiceImpl implements IExamService{
 		this.examMapper = examMapper;
 	}
 
+    /**
+     * 查询所有的选择题
+     * */
 	public List<Exam> qurryAll() {
 		return examMapper.queryAllExam();
 	}
 
+	/**
+	 * 添加选择题
+	 * */
 	public void insertStem(Exam exam) {
 		examMapper.insertStem(exam);
 	}
 
+	/**
+	 * 删除选择题
+	 * */
 	public void deleteStem(Integer id) {
 		examMapper.deleteStem(id);
 	}

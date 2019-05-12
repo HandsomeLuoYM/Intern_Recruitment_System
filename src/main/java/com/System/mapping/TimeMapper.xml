@@ -13,10 +13,12 @@
     	insert into time_table(begin_time,over_time,now_number,all_number,type) values(#{begin_time},#{over_time},0,#{all_number},#{type})
     </insert>
     
+    <!-- 根据Id查找时间段信息 -->
     <select id="Idfind" parameterType="int" resultType="Time">
     	select * from time_table where id = #{id}
     </select>
     
+    <!-- 用户报名让时间段现在的人数加一 -->
     <update id="updateTime" parameterType="Time">
     	update time_table set now_number = #{now_number} where id = #{id}
     </update>

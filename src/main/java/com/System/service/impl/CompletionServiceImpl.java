@@ -38,6 +38,9 @@ public final class CompletionServiceImpl implements ICompletionService{
 		completionMapper.insertCompletion(completion);
 	}
 
+	/**
+	 * 删除填空题
+	 * */
 	public void deleteCompletion(Integer id) {
 		completionMapper.deleteCompletion(id);
 	}

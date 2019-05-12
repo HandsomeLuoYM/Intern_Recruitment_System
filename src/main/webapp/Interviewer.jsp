@@ -190,21 +190,22 @@
 					var userId = $(this).attr("save-id");
 					var InterviewScore = $(this).parents("tr").find("#score")
 							.val();
+					//校验分数
 					if (InterviewScore > 100) {
 						alert("分数输入错误！（0-100）");
 						return false;
 					}
-						if (confirm("确定该用户的面试分数为"+InterviewScore+"？")) {
-							$.ajax({
-								url : "${APP_PATH}/adminController/RegisterScore",
-								type : "POST",
-								data : "userId=" + userId + "&" + "InterviewScore="
-										+ InterviewScore,
-								success : function(result) {
-									to_page(1);
-								}
-							});
-						}
+					if (confirm("确定该用户的面试分数为" + InterviewScore + "？")) {
+						$.ajax({
+							url : "${APP_PATH}/adminController/RegisterScore",
+							type : "POST",
+							data : "userId=" + userId + "&" + "InterviewScore="
+									+ InterviewScore,
+							success : function(result) {
+								to_page(1);
+							}
+						});
+					}
 				});
 	</script>
 
